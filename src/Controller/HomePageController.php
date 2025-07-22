@@ -17,6 +17,7 @@ final class HomePageController extends AbstractController
     public function homePage(CrudRepository $repository ): Response
     {
         $datas = $repository->findAll();
+        //$datas = $em->getRepository(Crud::class)->findAll() Méthode longue de la ligne précédente
         return $this->render('home_page/homePage.html.twig', [
             'datas'=> $datas,
         ]);
@@ -39,5 +40,23 @@ final class HomePageController extends AbstractController
             'form' => $form ->createView(),
 
         ]);  
+    }
+
+    #[Route('/update/{id}', name: 'app_update_form')]
+    public function update(Request $request , EntityManagerInterface $em, $id, CrudRepository $repository ): Response
+    {
+        $crud = $repository->find($id);
+        //$crud = $em->getRepository(Crud::class)->find($id) Méthode longue de la ligne précédente
+        $form = $this -> createForm(CrudTpeType::class, $crud);
+        $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()) {
+                $em->persist($crud);
+                $em ->flush();
+                $this->addFlash('notice', 'Modification réussi');
+                return $this->redirectToRoute('app_home_page');
+            }
+        return $this->render('form/createForm.html.twig', [
+            'form' => $form ->createView(),
+        ]);
     }
 }

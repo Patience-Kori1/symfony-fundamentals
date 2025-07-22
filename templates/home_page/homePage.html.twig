@@ -16,6 +16,11 @@
             {{message}}
         </div>
     {% endfor %}
+    {% for message in app.flashes('notice')%}
+        <div class="alert">
+            {{message}}
+        </div>
+    {% endfor %}
 
    <h2>Liste des données en BDD :</h2>
         <table class="table table-bordered table-striped">
@@ -34,7 +39,7 @@
                         <td>{{data.title}}</td>
                         <td>{{data.content}}</td>
                         <td>
-                            <a {#href="{{ path('update', {'id' : data.id})}}" #}class="btn btn-sm btn-warning" >Modifier</a> 
+                            <a href="{{ path('app_update_form', {'id' : data.id})}}" class="btn btn-sm btn-warning" >Modifier</a> 
                             <a  {#href="{{ path('delete', {'id' : data.id})}}"#} class="btn btn-sm btn-danger">Supprimer</a>
                         </td>
                     </tr>
@@ -43,7 +48,6 @@
                 {% endfor %}
                 
             </tbody>
-        </table>
-    
+        </table> 
 </div>
 {% endblock %}
