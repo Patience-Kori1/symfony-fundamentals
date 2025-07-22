@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %} Page d'accueil {% endblock %}
 
 {% block body %}
 <style>
@@ -9,8 +9,41 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}!</h1>
-   
+    <h1>Bienvenue sur la page d'accueil !</h1>
+
+    {% for message in app.flashes('success')%}
+        <div class="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+
+   <h2>Liste des données en BDD :</h2>
+        <table class="table table-bordered table-striped">
+            <thead>    
+                <tr class="table-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Conten</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead> 
+            <tbody>
+                {% for data in datas %}
+                    <tr>
+                        <th scope="row" >{{data.id}}</th>
+                        <td>{{data.title}}</td>
+                        <td>{{data.content}}</td>
+                        <td>
+                            <a {#href="{{ path('update', {'id' : data.id})}}" #}class="btn btn-sm btn-warning" >Modifier</a> 
+                            <a  {#href="{{ path('delete', {'id' : data.id})}}"#} class="btn btn-sm btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <p class="text-muted">Aucune donnée enregistrée pour le moment.</p>
+                {% endfor %}
+                
+            </tbody>
+        </table>
     
 </div>
 {% endblock %}
