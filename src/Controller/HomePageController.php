@@ -52,11 +52,24 @@ final class HomePageController extends AbstractController
             if($form->isSubmitted() && $form->isValid()) {
                 $em->persist($crud);
                 $em ->flush();
-                $this->addFlash('notice', 'Modification réussi');
+                $this->addFlash('notice', 'Modification réussie');
                 return $this->redirectToRoute('app_home_page');
             }
         return $this->render('form/createForm.html.twig', [
             'form' => $form ->createView(),
         ]);
+    }
+    
+    #[Route('/delete/{id}', name:'app_delete_form')]
+    
+    function delete(Request $request, $id, CrudRepository $repository, EntityManagerInterface $em)
+    {
+        $crud = $repository->find($id);
+        $em->remove($crud);
+        $em->flush();
+
+        $this->addFlash('notice', 'Supression effectuée avec réussie');
+        return $this->redirectToRoute('app_home_page');
+
     }
 }
